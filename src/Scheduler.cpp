@@ -17,7 +17,7 @@ double Scheduler::GetCalculateTime() {
 void Scheduler::PreProcessing(mJob job) {
     mjob = job;
     // data structure init
-    
+    alternative_node.clear();
     leaf_node = (bool *)malloc(mjob.taskNum * sizeof(bool));
     finish_node = (bool *)malloc(mjob.taskNum * sizeof(bool));
     root_node = (bool *)malloc(mjob.taskNum * sizeof(bool));
@@ -137,13 +137,13 @@ uint16_t Scheduler::Fitness(vector<vector<uint16_t>> sequence){
 
     for (int i = 0; i < sequence[1].size(); i++) {
         int idx = sequence[1][i] - 1;
-        if (sequence[0][idx] == 0){
+        if (sequence[0][idx] == 0){ // 0 for robot
             r_time += mjob.task_list[idx].r_time;
         }
-        else if (sequence[0][idx] == 1){
+        else if (sequence[0][idx] == 1){ // 1 for human
             h_time += mjob.task_list[idx].h_time;
         }
-        else if (sequence[0][idx] == 2){
+        else if (sequence[0][idx] == 2){ // 2 for both
             uint16_t common_time = max(r_time, h_time);
             r_time = mjob.task_list[idx].r_time + common_time;
             h_time = mjob.task_list[idx].h_time + common_time;

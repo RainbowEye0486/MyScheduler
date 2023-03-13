@@ -16,7 +16,7 @@
 # define NOR_RAND()      ((double)rand() / ((RAND_MAX)))
 
 # define PRINT       0
-# define Max_iter    1000
+# define Max_iter    30
 
 using namespace std::chrono;
 using namespace std;
@@ -54,10 +54,13 @@ public:
     bool *root_node;
     vector<uint16_t> alternative_node;
     vector<uint16_t> avaliable_node;
+    vector<vector<uint16_t>> avaliable_node_GP;
+
+    vector<uint16_t> min_fit_list;
+    vector<uint16_t> avg_fit_list;
     // Members used in Kizilay's scheduler
     uint16_t taskNum; // How many task in the job
     uint16_t station; // Best value of used station
-    uint16_t cycleTime; // Duration in a period
     void PreProcessing(mJob);
     vector<vector<uint16_t>> Sequence_Generate();
     uint16_t Fitness(vector<vector<uint16_t>>);

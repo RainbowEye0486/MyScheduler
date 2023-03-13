@@ -822,6 +822,10 @@ algorithm
 math.h
 -
 
+/home/airobots/myScheduler/src/GP.cpp
+../include/GP.h
+/home/airobots/myScheduler/include/GP.h
+
 /home/airobots/myScheduler/src/main.cpp
 projectConfig.h
 /home/airobots/myScheduler/src/projectConfig.h

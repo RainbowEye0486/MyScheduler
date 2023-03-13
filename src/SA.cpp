@@ -36,7 +36,7 @@ void SA::RunAlgorithm(){
     vector<vector<uint16_t>> best_sequence = first_sequence;
     vector<vector<uint16_t>> current_sequence = first_sequence;
     vector<vector<uint16_t>> new_sequence = first_sequence;
-    uint16_t min_fitness = Fitness(first_sequence);
+    uint16_t min_fitness = UINT16_MAX;
     uint16_t current_fitness = Fitness(first_sequence);
     uint16_t new_fitness = Fitness(first_sequence);
     double T = T_init;
@@ -62,26 +62,33 @@ void SA::RunAlgorithm(){
                 cout << "\033[1;31m[ERROR]: Generate wrong sequence\033[0m" << endl;
                 return;
             }
+            new_fitness = Fitness(new_sequence);
             // select a worse solusion 
             if (new_fitness < current_fitness) {
                 current_sequence = new_sequence;
+                current_fitness = new_fitness;
                 if (new_fitness < min_fitness) {
                     best_sequence = new_sequence;
                     min_fitness = new_fitness;
+                    // cout << "[TEST] Best fitness: " << min_fitness << endl;
+                    // PRINT_SEQUENCE(best_sequence);
                 }
             }
             else{
                 if (exp((new_fitness - current_fitness) / T) >= (double)NOR_RAND()) {
                     current_sequence = new_sequence;
+                    current_fitness = new_fitness;
                 }      
             }
          }
         T *= Alpha;
         if (PRINT) cout << "T = " << (double)T << endl;
+        // print best_fitness
+        // cout << "Best fitness: " << min_fitness << endl;
     }
-    if (PRINT) cout << "[INFO]: Best value " << min_fitness << endl;
+    cout << "[INFO]: Best value " << min_fitness << endl;
     station = min_fitness;
-    if (PRINT) PRINT_SEQUENCE(best_sequence);
+    PRINT_SEQUENCE(best_sequence);
 
 
     auto stop = high_resolution_clock::now();
@@ -236,18 +243,12 @@ vector<vector<uint16_t>> SA::Neighbor(vector<vector<uint16_t>> sequence){
         uint16_t pick_task = alternative_node[rand_pick];
         if (PRINT)cout << "[INFO]: pick task " << pick_task << endl;
         // find index of pick_task in new_sequence
-        int idx = 0;
-        for (int i = 0; i < new_sequence.size(); i++) {
-            if (new_sequence[i] == pick_task) {
-                idx = i;
-                break;
-            }
-        }
+
         if (mjob.task_list[pick_task - 1].executor == 'h') {
-            exe_sequence[idx] = 0;
+            exe_sequence[pick_task - 1] = 0;
         }
         else {
-            exe_sequence[idx] = 1;
+            exe_sequence[pick_task - 1] = 1;
         }
     }
     else {

@@ -344,6 +344,16 @@ void GA::RunAlgorithm() {
             }
         }
 
+        // print best fitness
+        // cout << "[INFO]: Best fitness: " << best_fitness << endl;
+        // print average fitness
+        float average_fitness = 0;
+        for (int i = 0; i < POP_SIZE; i++){
+            average_fitness += fitness[i];
+        }
+        average_fitness /= POP_SIZE;
+        // cout << "[INFO]: Average fitness: " << average_fitness << endl;
+
         // calculate probability
         if (PRINT)cout << "[INFO]: Calculate probability." << endl;
         vector<float> probability;
