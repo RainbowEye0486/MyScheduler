@@ -16,7 +16,7 @@
 # define NOR_RAND()      ((double)rand() / ((RAND_MAX)))
 
 # define PRINT       0
-# define Max_iter    30
+# define Max_iter    20
 
 using namespace std::chrono;
 using namespace std;

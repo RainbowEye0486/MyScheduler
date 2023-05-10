@@ -13,7 +13,7 @@
 
 
 string ALGORITHM = "GP";
-
+int replica = 10;
 
 using namespace std;
 using json = nlohmann::json;
@@ -21,7 +21,7 @@ using json = nlohmann::json;
 // Function declaration
 mJob Data_Resolver(string);
 
-string path = "/home/airobots/myScheduler/data/myData/mData";
+string path = "/home/airobots/MyScheduler/data/myData/mData";
 
 
 int main (int argc, char *argv[])
@@ -47,18 +47,22 @@ int main (int argc, char *argv[])
     
     vector<double> calculate_time; 
 
-   
+    
     int optimal_cnt = 0;
     double CPU_time = 0;
-    ofstream station_file;
-    ofstream timelog_file;
+    ofstream best_fitness_file;
+    ofstream best_time_file;
     ofstream avg_fitness_file;
+    ofstream avg_time_file;
+    ofstream sd_fitness_file;
+    ofstream sd_time_file;
+    ofstream change_fitness_file;
 
     double *avg_fitness_accum = new double[Max_iter];
 
 
 
-    for (int i = 1337; i < 1338; i++) {
+    for (int i = 183; i < 1361; i++) {
         string data_path = path + to_string(i) + ".json";
         // sleep for 0.05 second
         usleep(50000);
@@ -74,60 +78,100 @@ int main (int argc, char *argv[])
         else if (algorithm.compare("GP") == 0){
             CGP->PreProcessing(job);
         }
-        uint16_t best_solution = UINT16_MAX;
-        double bestTime = 0;
-        for (int j = 0; j < 1; j++) {
+        vector<uint16_t> fit;
+        vector<double> time;
+        for (int j = 0; j < replica; j++) {
             
             if (algorithm.compare("SA") == 0){
                 CSA->RunAlgorithm();
-                if (CSA->GetSolution() < best_solution){
-                    best_solution = CSA->GetSolution();
-                    bestTime = CSA->GetCalculateTime();
-                }
+                fit.push_back(CSA->GetSolution());
+                time.push_back(CSA->GetCalculateTime());
+                
             }
             else if (algorithm.compare("GA") == 0){
                 CGA->RunAlgorithm();
-                if (CGA->GetSolution() < best_solution){
-                    best_solution = CGA->GetSolution();
-                    bestTime = CGA->GetCalculateTime();
-                }
+                fit.push_back(CGA->GetSolution());
+                time.push_back(CGA->GetCalculateTime());
             }
             else if (algorithm.compare("GP") == 0){
                 CGP->RunAlgorithm();
-                if (CGP->GetSolution() < best_solution){
-                    best_solution = CGP->GetSolution();
-                    bestTime = CGP->GetCalculateTime();
-                }
+                fit.push_back(CGP->GetSolution());
+                time.push_back(CGP->GetCalculateTime());
+                
             }
             
         }
-        solution.push_back(best_solution);
-        calculate_time.push_back(bestTime);
+
+        // calculate avg
+        float avg_fit = 0;
+        double avg_time = 0;
+        for (int j = 0; j < replica; j++) {
+            avg_fit += fit[j];
+            avg_time += time[j];
+        }
+        avg_fit = ((float)avg_fit/replica);
+        avg_time = avg_time / replica;
+
+        solution.push_back(avg_fit);
+        calculate_time.push_back(avg_time);
+
+        // calculate standard deviation of fitness
+        double sd_fit = 0;
+        for (int j = 0; j < replica; j++) {
+            sd_fit += pow((fit[j] - avg_fit), 2);
+        }
+        sd_fit = sqrt(sd_fit / replica);
+
+        // print best solution
+        uint16_t best_solution = UINT16_MAX;
+        double bestTime = 0;
+        for (int j = 0; j < replica; j++) {
+            if (fit[j] < best_solution) {
+                best_solution = fit[j];
+                bestTime = time[j];
+            }
+        }
 
         // print best time
-        cout << "Best time: " << bestTime << endl;
-        cout << "Fitness " << best_solution << endl;
+        cout << "avg time: " << avg_time << endl;
+        cout << "avg Fitness " << avg_fit << endl;
         
-        station_file.open("/home/airobots/myScheduler/data/results/fully_fitness_" + ALGORITHM + "-20.csv", ios::app);
-        timelog_file.open("/home/airobots/myScheduler/data/results/fully_timelog_" + ALGORITHM + "-20.csv", ios::app);
-        station_file << best_solution << "," << endl;
-        timelog_file << bestTime << "," << endl;
-        station_file.close();
-        timelog_file.close();
+        best_fitness_file.open("/home/airobots/MyScheduler/data/results/MD_best_fit_M" + ALGORITHM + ".csv", ios::app);
+        best_time_file.open("/home/airobots/MyScheduler/data/results/MD_best_time_M" + ALGORITHM + ".csv", ios::app);
+        avg_fitness_file.open("/home/airobots/MyScheduler/data/results/MD_avg_fit_M" + ALGORITHM + ".csv", ios::app);
+        avg_time_file.open("/home/airobots/MyScheduler/data/results/MD_avg_time_M" + ALGORITHM + ".csv", ios::app);
+        sd_fitness_file.open("/home/airobots/MyScheduler/data/results/MD_sd_fit_M" + ALGORITHM + ".csv", ios::app);
+        sd_time_file.open("/home/airobots/MyScheduler/data/results/MD_sd_time_M" + ALGORITHM + ".csv", ios::app);
+        best_fitness_file << best_solution << "," << endl;
+        best_time_file << bestTime << "," << endl;
+        avg_fitness_file << avg_fit << "," << endl;
+        avg_time_file << avg_time << "," << endl;
+        sd_fitness_file << sd_fit << "," << endl;
+        sd_time_file << avg_time << "," << endl;
 
-        for (int j = 0; j < Max_iter; j++) {
-            avg_fitness_accum[j] += (CGP->GetAvgFitness(j));
+        best_fitness_file.close();
+        best_time_file.close();
+        avg_fitness_file.close();
+        avg_time_file.close();
+        sd_fitness_file.close();
+        sd_time_file.close();
+
+        if (algorithm.compare("GP") == 0) {
+            for (int j = 0; j < Max_iter; j++) {
+                avg_fitness_accum[j] += (CGP->GetBestFitness(j));
+            }
         }
+
         
-        CPU_time += bestTime;
+        CPU_time += avg_time;
     }
 
 
-    avg_fitness_file.open("/home/airobots/myScheduler/data/results/fully_avg_fitness_" + ALGORITHM + "-20.csv", ios::app);
+    change_fitness_file.open("/home/airobots/MyScheduler/data/results/MD_fit_change_M" + ALGORITHM + ".csv", ios::app);
     for (int i = 0; i < Max_iter; i++) {
-        avg_fitness_file << avg_fitness_accum[i] / 1360 << "," << endl;
+        change_fitness_file << avg_fitness_accum[i] / 1360 << "," << endl;
     }
-    avg_fitness_file.close();
+    change_fitness_file.close();
 
     cout << "\033[1;32m[SYSTEM]: Simulation over.\033[0m" << endl;
         

@@ -1,4 +1,4 @@
-# Install script for directory: /home/airobots/myScheduler/lib/json
+# Install script for directory: /home/airobots/MyScheduler/lib/json
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

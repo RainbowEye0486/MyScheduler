@@ -7,7 +7,7 @@
 
 # define Init_deep  2
 # define Max_deep   6
-# define POP_SIZE    20
+# define POP_SIZE    50
 # define ELITE_SIZE  0
 # define CR         0.8 // Crossover rate
 # define MR         0.1 // Mutation rate
@@ -71,7 +71,7 @@ class GP: private Scheduler{
         uint16_t GetSolution();
         double GetCalculateTime();
         void RunAlgorithm();
-        double GetAvgFitness(int i);
+        double GetBestFitness(int i);
 
     private:
         static GP *inst_;

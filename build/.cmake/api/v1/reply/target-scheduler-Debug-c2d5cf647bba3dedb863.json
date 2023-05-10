@@ -59,19 +59,19 @@
 			[
 				{
 					"backtrace" : 2,
-					"path" : "/home/airobots/myScheduler/include"
+					"path" : "/home/airobots/MyScheduler/include"
 				},
 				{
 					"backtrace" : 2,
-					"path" : "/home/airobots/myScheduler/src"
+					"path" : "/home/airobots/MyScheduler/src"
 				},
 				{
 					"backtrace" : 2,
-					"path" : "/home/airobots/myScheduler/data"
+					"path" : "/home/airobots/MyScheduler/data"
 				},
 				{
 					"backtrace" : 3,
-					"path" : "/home/airobots/myScheduler/lib/json/include"
+					"path" : "/home/airobots/MyScheduler/lib/json/include"
 				}
 			],
 			"language" : "CXX",

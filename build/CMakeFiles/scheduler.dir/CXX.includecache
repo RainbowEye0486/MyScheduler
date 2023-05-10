@@ -782,27 +782,27 @@ stdint.h
 
 ../lib/json/include/nlohmann/thirdparty/hedley/hedley_undef.hpp
 
-/home/airobots/myScheduler/include/GA.h
+/home/airobots/MyScheduler/include/GA.h
 random
 -
 Scheduler.h
-/home/airobots/myScheduler/include/Scheduler.h
+/home/airobots/MyScheduler/include/Scheduler.h
 
-/home/airobots/myScheduler/include/GP.h
+/home/airobots/MyScheduler/include/GP.h
 queue
 -
 stack
 -
 Scheduler.h
-/home/airobots/myScheduler/include/Scheduler.h
+/home/airobots/MyScheduler/include/Scheduler.h
 assert.h
 -
 
-/home/airobots/myScheduler/include/SA.h
+/home/airobots/MyScheduler/include/SA.h
 Scheduler.h
-/home/airobots/myScheduler/include/Scheduler.h
+/home/airobots/MyScheduler/include/Scheduler.h
 
-/home/airobots/myScheduler/include/Scheduler.h
+/home/airobots/MyScheduler/include/Scheduler.h
 iostream
 -
 cstring
@@ -822,15 +822,11 @@ algorithm
 math.h
 -
 
-/home/airobots/myScheduler/src/GP.cpp
-../include/GP.h
-/home/airobots/myScheduler/include/GP.h
-
-/home/airobots/myScheduler/src/main.cpp
+/home/airobots/MyScheduler/src/main.cpp
 projectConfig.h
-/home/airobots/myScheduler/src/projectConfig.h
+/home/airobots/MyScheduler/src/projectConfig.h
 nlohmann/json.hpp
-/home/airobots/myScheduler/src/nlohmann/json.hpp
+/home/airobots/MyScheduler/src/nlohmann/json.hpp
 stdio.h
 -
 stdlib.h
@@ -844,9 +840,9 @@ unistd.h
 iostream
 -
 ../include/SA.h
-/home/airobots/myScheduler/include/SA.h
+/home/airobots/MyScheduler/include/SA.h
 ../include/GA.h
-/home/airobots/myScheduler/include/GA.h
+/home/airobots/MyScheduler/include/GA.h
 ../include/GP.h
-/home/airobots/myScheduler/include/GP.h
+/home/airobots/MyScheduler/include/GP.h
 

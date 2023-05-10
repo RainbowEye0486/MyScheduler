@@ -6,5 +6,5 @@ CXX_FLAGS = -g   -std=gnu++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/airobots/myScheduler/include -I/home/airobots/myScheduler/src -I/home/airobots/myScheduler/data -I/home/airobots/myScheduler/lib/json/include 
+CXX_INCLUDES = -I/home/airobots/MyScheduler/include -I/home/airobots/MyScheduler/src -I/home/airobots/MyScheduler/data -I/home/airobots/MyScheduler/lib/json/include 
 

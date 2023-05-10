@@ -27,8 +27,8 @@ double GP::GetCalculateTime(){
     return Scheduler::GetCalculateTime();
 }
 
-double GP::GetAvgFitness(int i){
-    return avg_fit_list[i];
+double GP::GetBestFitness(int i){
+    return min_fit_list[i];
 }
 
 /**
@@ -38,8 +38,10 @@ double GP::GetAvgFitness(int i){
 void GP::RunAlgorithm(){
     auto start = high_resolution_clock::now();
     fitness_time = 0;
+    
 
     avg_fit_list.clear();
+    min_fit_list.clear();
     if (PRINT)cout << "[INFO]: GP algorithm start." << endl;
     // Parameter setting
     vector<Node *> population;
@@ -63,7 +65,8 @@ void GP::RunAlgorithm(){
             
         else
             population.push_back(Tree_init(2, Max_deep, 1, "full"));
-        Validate_Depth(population[i], 1);
+        if (NEW_ALG)
+            Validate_Depth(population[i], 1);
     }
 
     // shuffle population
@@ -124,6 +127,7 @@ void GP::RunAlgorithm(){
               
         // cout << "[INFO]: GP average fitness: " << (double)sum / (double)(POP_SIZE - extinct_num)<< endl;
         // print best fitness
+        
         // cout << "[INFO]: GP best fitness: " << best_fitness << endl;
         avg_fit_list.push_back((double)sum / (double)POP_SIZE);
 
@@ -144,7 +148,7 @@ void GP::RunAlgorithm(){
             feature_flag = true;
 
             for (int i = 0; i < POP_SIZE; i++) {
-                if (history_tree.size() < int(POP_SIZE * 0.1)) {
+                if (history_tree.size() < int(POP_SIZE * 0.2)) {
                     history_tree.push_back(CloneTree(population[i]));
                     history_fitness.push_back(fitness[i]);
                 }
@@ -193,19 +197,8 @@ void GP::RunAlgorithm(){
                 }
             }
             
-            
-
-
-            // [Trim] trim tree
-            float sigmoid = 0.8 / (1.0 + (exp(-1.0 * ((double)it / (double)Max_iter - 0.4) * 15.0)));
 
             
-            // for (int i = 0; i < POP_SIZE; i++) {
-            //     population[i] = Trim(population[i], fitness[i]);        
-            // }
-            // cout << "[INFO]: GP trim success rate: " << trim_success_rate / POP_SIZE << endl;
-  
-
             int offspring_cnt[POP_SIZE] = { 0 };
             
             // Rescale fitness and get probability
@@ -285,7 +278,7 @@ void GP::RunAlgorithm(){
         }
         population.clear();
         population = new_population;
-
+        min_fit_list.push_back(best_fitness);
     }
 
 
@@ -296,6 +289,9 @@ void GP::RunAlgorithm(){
     // cout << "[INFO]: GP function fitness " << fitness_time << " s." << endl;
     calculate_time = (double)duration.count() / (double)1000000;
     station = best_fitness;
+    // clear useless vector and memory
+    history_fitness.clear();
+    history_tree.clear();
 }
 
 Node *GP::Node_init(int depth){
@@ -638,9 +634,10 @@ void GP::Mutation(Node *root) {
     if (!root) {
         cout << "\033[1;33m[WARNING]: root not found!\033[0m" << endl;
     }
-    if (!Validate_Depth(root, 1)) {
-        cout << "\033[1;31m[ERROR]: Validate failed!\033[0m" << endl;
-    }
+    if (NEW_ALG)
+        if (!Validate_Depth(root, 1)) 
+            cout << "\033[1;31m[ERROR]: Validate failed!\033[0m" << endl;
+    
     
     // random select a node from the tree
     Node *random_node;
@@ -654,9 +651,10 @@ void GP::Mutation(Node *root) {
 
     int parent_deep = parent->depth;
 
-    if (parent_deep > Max_deep) {
-        cout << "\033[1;33m[WARNING]: parent_deep > Max_deep\033[0m" << endl;
-    }
+    if (NEW_ALG)
+        if (parent_deep > Max_deep) {
+            cout << "\033[1;33m[WARNING]: parent_deep > Max_deep\033[0m" << endl;
+        }
     
     // create a new subtree
     Node *new_subtree;
@@ -665,7 +663,7 @@ void GP::Mutation(Node *root) {
     }
     else {
         int new_deep = RAND(1, Max_deep - parent_deep);
-        new_subtree = Tree_init(1, new_deep, parent_deep + 1, "grow");
+        new_subtree = Tree_init(1, Max_deep, parent_deep + 1, "grow");
     }
 
     // replace random_node with new_subtree
@@ -679,9 +677,10 @@ void GP::Mutation(Node *root) {
     FreeTree(random_node);
     Resize_height(new_subtree);
 
-    if (!Validate_Depth(root, 1)) {
-        cout << "\033[1;31m[ERROR]: Validate failed!\033[0m" << endl;
-    }
+    if (NEW_ALG)
+        if (!Validate_Depth(root, 1)) 
+            cout << "\033[1;31m[ERROR]: Validate failed!\033[0m" << endl;
+    
 }
 
 
@@ -758,8 +757,7 @@ void GP::CrossOver(Node *root1, Node *root2) {
         random_node2 = candaite_queue[random_idx];
     }
     else {
-        int random_idx2 = RAND(1, candaite_queue.size());
-        random_node2 = candaite_queue[random_idx2];
+        random_node2 = Random_node(root2, false);
     }
 
          
@@ -805,9 +803,11 @@ void GP::CrossOver(Node *root1, Node *root2) {
         for (int i = 0; i < tmp_queue2.size(); i++) {
             tmp_queue2[i]->depth = tmp_queue2[i]->depth - parent1->depth + 1;
         }
-        
-        Validate_Depth(root2, 1);
-        Validate_Depth(root1, 1);
+        if (NEW_ALG) {
+            Validate_Depth(root2, 1);
+            Validate_Depth(root1, 1);
+        }
+
         cout << "only head to choose" << endl;
         return;
     }
@@ -840,10 +840,10 @@ void GP::CrossOver(Node *root1, Node *root2) {
 
 
     // Validate the tree
-    if (!Validate_Depth(root1, 1))
-        cout << "\033[1;31m[ERROR]: Validate failed!\033[0m" << endl;
-    if (!Validate_Depth(root2, 1))
-        cout << "\033[1;31m[ERROR]: Validate failed!\033[0m" << endl;
+    if (NEW_ALG) {
+        Validate_Depth(root1, 1);
+        Validate_Depth(root2, 1);
+    }
     Resize_height(random_node1);
     Resize_height(random_node2);
 
@@ -958,8 +958,9 @@ Node *GP::Trim(Node *root, uint16_t fit){
             // free parent
             FreeTree(parent);
             // Validate the tree
-            if (!Validate_Depth(root, 1))
-                cout << "\033[1;31m[ERROR]: Validate failed!\033[0m" << endl;
+            if (NEW_ALG)
+                if (!Validate_Depth(root, 1))
+                    cout << "\033[1;31m[ERROR]: Validate failed!\033[0m" << endl;
             return root;
         }
         else {

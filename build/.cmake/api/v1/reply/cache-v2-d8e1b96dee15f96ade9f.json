@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/airobots/myScheduler/build"
+			"value" : "/home/airobots/MyScheduler/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -479,7 +479,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/airobots/myScheduler"
+			"value" : "/home/airobots/MyScheduler"
 		},
 		{
 			"name" : "CMAKE_INSTALL_BINDIR",
@@ -1463,7 +1463,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/airobots/myScheduler/build"
+			"value" : "/home/airobots/MyScheduler/build"
 		},
 		{
 			"name" : "SCHEDULER_SOURCE_DIR",
@@ -1475,7 +1475,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/airobots/myScheduler"
+			"value" : "/home/airobots/MyScheduler"
 		},
 		{
 			"name" : "_GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX",
@@ -1499,7 +1499,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/airobots/myScheduler/build/lib/json"
+			"value" : "/home/airobots/MyScheduler/build/lib/json"
 		},
 		{
 			"name" : "json_SOURCE_DIR",
@@ -1511,7 +1511,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/airobots/myScheduler/lib/json"
+			"value" : "/home/airobots/MyScheduler/lib/json"
 		}
 	],
 	"kind" : "cache",

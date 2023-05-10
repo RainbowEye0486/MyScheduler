@@ -20,7 +20,7 @@ elif test == 'a':
     compare = "avg_fitness"
 
   
-with open('/home/airobots/myScheduler/data/results/fully_' + compare + '_GP.csv','r') as csvfile:
+with open('/home/airobots/MyScheduler/data/results/orig_' + compare + '_GP-20.csv','r') as csvfile:
     lines = csv.reader(csvfile, delimiter=',')
     i = 1
     for row in lines:
@@ -35,7 +35,7 @@ with open('/home/airobots/myScheduler/data/results/fully_' + compare + '_GP.csv'
         i += 1
 
 
-with open('/home/airobots/myScheduler/data/results/fully_' + compare + '_GP-20.csv','r') as csvfile2:
+with open('/home/airobots/MyScheduler/data/results/fully_' + compare + '_GP-20.csv','r') as csvfile2:
     lines = csv.reader(csvfile2, delimiter=',')
     i = 1
     for row in lines:

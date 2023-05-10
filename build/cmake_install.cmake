@@ -1,4 +1,4 @@
-# Install script for directory: /home/airobots/myScheduler
+# Install script for directory: /home/airobots/MyScheduler
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/airobots/myScheduler/build/lib/json/cmake_install.cmake")
+  include("/home/airobots/MyScheduler/build/lib/json/cmake_install.cmake")
 
 endif()
 
@@ -51,5 +51,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/airobots/myScheduler/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/airobots/MyScheduler/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

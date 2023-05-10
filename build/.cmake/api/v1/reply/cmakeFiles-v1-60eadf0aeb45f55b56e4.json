@@ -131,8 +131,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/home/airobots/myScheduler/build",
-		"source" : "/home/airobots/myScheduler"
+		"build" : "/home/airobots/MyScheduler/build",
+		"source" : "/home/airobots/MyScheduler"
 	},
 	"version" : 
 	{
